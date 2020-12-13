@@ -22,6 +22,23 @@ defmodule Homework.Transactions do
   end
 
   @doc """
+  Returns all transactions for a given company.
+
+  ## Examples
+
+      iex> get_company_transactions(123)
+      [%Transaction{}, ...]
+
+  """
+  def get_company_transactions(company_id) do
+    # The better way to do this would be to filter in the db query,
+    #   but I hit some roadblocks trying to figure that out, and decided to use my time moving forward on other things in the project.
+    #   So this works, but is not the way I would do it in production code.
+    transactions = Repo.all(Transaction)
+    Enum.filter(transactions, fn t -> t.company_id == company_id end)
+  end
+
+  @doc """
   Gets a single transaction.
 
   Raises `Ecto.NoResultsError` if the Transaction does not exist.
