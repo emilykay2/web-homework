@@ -107,7 +107,7 @@ defmodule Homework.TransactionsResolverTest do
       {:ok, created_transaction} = TransactionsResolver.create_transaction(%{}, valid_attrs, %{})
 
       assert created_transaction.amount == valid_attrs.amount
-      # assert created_transaction.credit == valid_attrs.credit // I think this is the bug, come back and fix this
+      assert created_transaction.credit == valid_attrs.credit
       assert created_transaction.debit == valid_attrs.debit
       assert created_transaction.description == valid_attrs.description
       assert created_transaction.merchant_id == valid_attrs.merchant_id
@@ -122,7 +122,7 @@ defmodule Homework.TransactionsResolverTest do
       {:ok, updated_transaction} = TransactionsResolver.update_transaction(%{}, Map.put(update_attrs, :id, transaction.id), %{})
 
       assert updated_transaction.amount == update_attrs.amount
-      # assert updated_transaction.credit == update_attrs.credit // I think this is the bug, come back and fix this
+      assert updated_transaction.credit == update_attrs.credit
       assert updated_transaction.debit == update_attrs.debit
       assert updated_transaction.description == update_attrs.description
       assert updated_transaction.merchant_id == update_attrs.merchant_id

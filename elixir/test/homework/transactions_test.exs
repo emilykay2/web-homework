@@ -1,10 +1,10 @@
 defmodule Homework.TransactionsTest do
   use Homework.DataCase
 
-  alias Ecto.UUID
   alias Homework.Merchants
   alias Homework.Transactions
   alias Homework.Users
+  alias Homework.Companies
 
   describe "transactions" do
     alias Homework.Transactions.Transaction
@@ -33,22 +33,36 @@ defmodule Homework.TransactionsTest do
           last_name: "some updated last_name"
         })
 
+      {:ok, company1} =
+        Companies.create_company(%{
+          name: "some company",
+          credit_line: 1000
+        })
+
+      {:ok, company2} =
+        Companies.create_company(%{
+          name: "some updated company",
+          credit_line: 1000
+        })
+
       valid_attrs = %{
-        amount: 42,
+        amount: 4221,
         credit: true,
         debit: true,
         description: "some description",
         merchant_id: merchant1.id,
-        user_id: user1.id
+        user_id: user1.id,
+        company_id: company1.id
       }
 
       update_attrs = %{
-        amount: 43,
+        amount: 4321,
         credit: false,
         debit: false,
         description: "some updated description",
         merchant_id: merchant2.id,
-        user_id: user2.id
+        user_id: user2.id,
+        company_id: company2.id
       }
 
       invalid_attrs = %{
@@ -57,7 +71,8 @@ defmodule Homework.TransactionsTest do
         debit: nil,
         description: nil,
         merchant_id: nil,
-        user_id: nil
+        user_id: nil,
+        company_id: nil
       }
 
       {:ok,
@@ -68,7 +83,9 @@ defmodule Homework.TransactionsTest do
          merchant1: merchant1,
          merchant2: merchant2,
          user1: user1,
-         user2: user2
+         user2: user2,
+         company1: company1,
+         company2: company2
        }}
     end
 
@@ -97,7 +114,7 @@ defmodule Homework.TransactionsTest do
       user1: user1
     } do
       assert {:ok, %Transaction{} = transaction} = Transactions.create_transaction(valid_attrs)
-      assert transaction.amount == 42
+      assert transaction.amount == 4221
       assert transaction.credit == true
       assert transaction.debit == true
       assert transaction.description == "some description"
@@ -122,7 +139,7 @@ defmodule Homework.TransactionsTest do
       assert {:ok, %Transaction{} = transaction} =
                Transactions.update_transaction(transaction, update_attrs)
 
-      assert transaction.amount == 43
+      assert transaction.amount == 4321
       assert transaction.credit == false
       assert transaction.debit == false
       assert transaction.description == "some updated description"
