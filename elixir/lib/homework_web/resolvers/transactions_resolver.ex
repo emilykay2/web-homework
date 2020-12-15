@@ -3,6 +3,7 @@ defmodule HomeworkWeb.Resolvers.TransactionsResolver do
   alias Homework.Transactions
   alias Homework.Users
   alias Homework.Companies
+  alias HomeworkWeb.Resolvers.CompaniesResolver
 
   def convert_to_int(val) do
     round(val * 100)
@@ -48,7 +49,8 @@ defmodule HomeworkWeb.Resolvers.TransactionsResolver do
   Get the company associated with a transaction
   """
   def company(_root, _args, %{source: %{company_id: company_id}}) do
-    {:ok, Companies.get_company!(company_id)}
+    company = Companies.get_company!(company_id)
+    {:ok, CompaniesResolver.append_available_credit(company)}
   end
 
   @doc """
