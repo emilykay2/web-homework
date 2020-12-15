@@ -2,14 +2,17 @@ defmodule HomeworkWeb.Resolvers.CompaniesResolver do
   alias Homework.Companies
   alias Homework.Transactions
 
-  def calculate_available_credit(company) do
-    transactions = Transactions.get_company_transactions(company.id)
-    total_amount_spent = Enum.reduce(transactions, 0, fn t, acc -> t.amount + acc end)
-    company.credit_line - total_amount_spent
+  def calculate_available_credit(transactions) do
+    fn(company) ->
+      total_amount_spent = Enum.reduce(transactions, 0, fn t, acc -> t.amount + acc end)
+      company.credit_line - total_amount_spent
+    end
   end
 
   def append_available_credit(company) do
-    Map.put(company, :available_credit, calculate_available_credit(company))
+    transactions = Transactions.get_company_transactions(company.id)
+    calculate = calculate_available_credit(transactions)
+    Map.put(company, :available_credit, calculate.(company))
   end
 
   @doc """
