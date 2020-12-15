@@ -4,19 +4,29 @@ defmodule HomeworkWeb.Resolvers.TransactionsResolver do
   alias Homework.Users
   alias Homework.Companies
 
-  def convert_amount_to_decimal(transaction) do
-    %{transaction | amount: transaction.amount / 100}
+  def convert_to_int(val) do
+    round(val * 100)
   end
 
   def convert_amount_to_int(transaction) do
-    %{transaction | amount: round(transaction.amount * 100)}
+    %{transaction | amount: convert_to_int(transaction.amount)}
+  end
+
+  def convert_amount_to_decimal(transaction) do
+    %{transaction | amount: transaction.amount / 100}
   end
 
   @doc """
   Get a list of transcations
   """
   def transactions(_root, args, _info) do
-    transactions = Transactions.list_transactions(args)
+    converted_args = cond do
+      Map.has_key?(args, :min) and Map.has_key?(args, :max) -> %{min: convert_to_int(args.min), max: convert_to_int(args.max)}
+      Map.has_key?(args, :min) -> %{min: convert_to_int(args.min)}
+      Map.has_key?(args, :max) -> %{max: convert_to_int(args.max)}
+      true -> %{}
+    end
+    transactions = Transactions.list_transactions(converted_args)
     {:ok, Enum.map(transactions, &convert_amount_to_decimal/1)}
   end
 

@@ -23,6 +23,6 @@ company1 = Homework.Repo.insert!(%Homework.Companies.Company{name: "company1", c
 company2 = Homework.Repo.insert!(%Homework.Companies.Company{name: "company2", credit_line: 200})
 company3 = Homework.Repo.insert!(%Homework.Companies.Company{name: "company3", credit_line: 300})
 
-Homework.Repo.insert!(%Homework.Transactions.Transaction{amount: 5, credit: true, debit: true, description: "transaction1", merchant_id: merchant1.id, user_id: user1.id, company_id: company1.id})
-Homework.Repo.insert!(%Homework.Transactions.Transaction{amount: 5, credit: true, debit: true, description: "transaction2", merchant_id: merchant2.id, user_id: user2.id, company_id: company2.id})
-Homework.Repo.insert!(%Homework.Transactions.Transaction{amount: 5, credit: true, debit: true, description: "transaction3", merchant_id: merchant3.id, user_id: user3.id, company_id: company3.id})
+Homework.Repo.insert!(%Homework.Transactions.Transaction{amount: 10000, credit: true, debit: true, description: "transaction1", merchant_id: merchant1.id, user_id: user1.id, company_id: company1.id})
+Homework.Repo.insert!(%Homework.Transactions.Transaction{amount: 20000, credit: true, debit: true, description: "transaction2", merchant_id: merchant2.id, user_id: user2.id, company_id: company2.id})
+Homework.Repo.insert!(%Homework.Transactions.Transaction{amount: 30000, credit: true, debit: true, description: "transaction3", merchant_id: merchant3.id, user_id: user3.id, company_id: company3.id})

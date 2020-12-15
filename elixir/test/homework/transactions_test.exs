@@ -100,7 +100,29 @@ defmodule Homework.TransactionsTest do
 
     test "list_transactions/1 returns all transactions", %{valid_attrs: valid_attrs} do
       transaction = transaction_fixture(valid_attrs)
-      assert Transactions.list_transactions([]) == [transaction]
+      assert Transactions.list_transactions(%{}) == [transaction]
+    end
+
+    test "list_transactions/1 filters based on min", %{valid_attrs: valid_attrs} do
+      transaction_fixture(valid_attrs)
+      assert {:ok, transactionAboveMin} = Transactions.create_transaction(%{valid_attrs | amount: 10001})
+      args = %{min: 10000}
+      assert Transactions.list_transactions(args) == [transactionAboveMin]
+    end
+
+    test "list_transactions/1 filters based on max", %{valid_attrs: valid_attrs} do
+      transaction_fixture(valid_attrs)
+      assert {:ok, transactionBelowMax} = Transactions.create_transaction(%{valid_attrs | amount: 2999})
+      args = %{max: 3000}
+      assert Transactions.list_transactions(args) == [transactionBelowMax]
+    end
+
+    test "list_transactions/1 filters based on min and max", %{valid_attrs: valid_attrs} do
+      transaction_fixture(valid_attrs)
+      Transactions.create_transaction(%{valid_attrs | amount: 10000})
+      assert {:ok, transactionInRange} = Transactions.create_transaction(%{valid_attrs | amount: 6500})
+      args = %{min: 6000, max: 7000}
+      assert Transactions.list_transactions(args) == [transactionInRange]
     end
 
     test "get_transaction!/1 returns the transaction with given id", %{valid_attrs: valid_attrs} do

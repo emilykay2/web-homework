@@ -13,6 +13,8 @@ defmodule HomeworkWeb.Schema do
   query do
     @desc "Get all Transactions"
     field(:transactions, list_of(:transaction)) do
+      arg(:min, :float)
+      arg(:max, :float)
       resolve(&TransactionsResolver.transactions/3)
     end
 

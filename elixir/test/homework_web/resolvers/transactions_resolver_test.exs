@@ -103,6 +103,17 @@ defmodule Homework.TransactionsResolverTest do
       assert Enum.at(transactions, 0) == %{transaction | amount: 42.21 }
     end
 
+    test "transactions/3 returns all transactions within given min and max values", %{valid_attrs: valid_attrs} do
+      transaction_fixture(%{valid_attrs | amount: 4221})
+      Transactions.create_transaction(%{valid_attrs | amount: 10000})
+      assert {:ok, transactionInRange} = Transactions.create_transaction(%{valid_attrs | amount: 6500})
+
+      args = %{min: 60.00, max: 70.00}
+      {:ok, transactions} = TransactionsResolver.transactions(%{}, args, %{})
+
+      assert transactions == [%{transactionInRange | amount: 65.00 }]
+    end
+
     test "create_transaction/3 creates and returns a transaction", %{valid_attrs: valid_attrs} do
       {:ok, created_transaction} = TransactionsResolver.create_transaction(%{}, valid_attrs, %{})
 
