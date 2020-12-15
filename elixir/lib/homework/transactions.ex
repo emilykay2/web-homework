@@ -31,11 +31,8 @@ defmodule Homework.Transactions do
 
   """
   def get_company_transactions(company_id) do
-    # The better way to do this would be to filter in the db query,
-    #   but I hit some roadblocks trying to figure that out, and decided to use my time moving forward on other things in the project.
-    #   So this works, but is not the way I would do it in production code.
-    transactions = Repo.all(Transaction)
-    Enum.filter(transactions, fn t -> t.company_id == company_id end)
+    Repo.all(from t in Transaction,
+              where: t.company_id == ^company_id)
   end
 
   @doc """
