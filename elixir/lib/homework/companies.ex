@@ -88,4 +88,17 @@ defmodule Homework.Companies do
   def delete_company(%Company{} = company) do
     Repo.delete(company)
   end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking company changes.
+
+  ## Examples
+
+      iex> change_company(company)
+      %Ecto.Changeset{data: %Company{}}
+
+  """
+  def change_company(%Company{} = company, attrs \\ %{}) do
+    Company.changeset(company, attrs)
+  end
 end
