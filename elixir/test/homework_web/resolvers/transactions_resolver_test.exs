@@ -45,7 +45,7 @@ defmodule Homework.TransactionsResolverTest do
         })
 
       valid_attrs = %{
-        amount: 42,
+        amount: 42.21,
         credit: true,
         debit: true,
         description: "some description",
@@ -55,7 +55,7 @@ defmodule Homework.TransactionsResolverTest do
       }
 
       update_attrs = %{
-        amount: 43,
+        amount: 43.21,
         credit: false,
         debit: false,
         description: "some updated description",
@@ -98,9 +98,9 @@ defmodule Homework.TransactionsResolverTest do
     end
 
     test "transactions/3 returns all transactions", %{valid_attrs: valid_attrs} do
-      transaction = transaction_fixture(valid_attrs)
+      transaction = transaction_fixture(%{valid_attrs | amount: 4221})
       {:ok, transactions} = TransactionsResolver.transactions(%{}, %{}, %{})
-      assert Enum.at(transactions, 0) == transaction
+      assert Enum.at(transactions, 0) == %{transaction | amount: 42.21 }
     end
 
     test "create_transaction/3 creates and returns a transaction", %{valid_attrs: valid_attrs} do
@@ -117,7 +117,7 @@ defmodule Homework.TransactionsResolverTest do
     end
 
     test "update_transaction/3 updates and returns a transaction", %{valid_attrs: valid_attrs, update_attrs: update_attrs} do
-      transaction = transaction_fixture(valid_attrs)
+      transaction = transaction_fixture(%{valid_attrs | amount: 4221})
 
       {:ok, updated_transaction} = TransactionsResolver.update_transaction(%{}, Map.put(update_attrs, :id, transaction.id), %{})
 
@@ -132,7 +132,7 @@ defmodule Homework.TransactionsResolverTest do
     end
 
     test "delete_transaction/3 deletes and returns a transaction", %{valid_attrs: valid_attrs} do
-      transaction = transaction_fixture(valid_attrs)
+      transaction = transaction_fixture(%{valid_attrs | amount: 4221})
       args = %{id: transaction.id}
 
       {:ok, deleted_transaction} = TransactionsResolver.delete_transaction(%{}, args, %{})

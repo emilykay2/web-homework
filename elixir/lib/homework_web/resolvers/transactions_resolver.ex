@@ -4,11 +4,20 @@ defmodule HomeworkWeb.Resolvers.TransactionsResolver do
   alias Homework.Users
   alias Homework.Companies
 
+  def convert_amount_to_decimal(transaction) do
+    %{transaction | amount: transaction.amount / 100}
+  end
+
+  def convert_amount_to_int(transaction) do
+    %{transaction | amount: round(transaction.amount * 100)}
+  end
+
   @doc """
   Get a list of transcations
   """
   def transactions(_root, args, _info) do
-    {:ok, Transactions.list_transactions(args)}
+    transactions = Transactions.list_transactions(args)
+    {:ok, Enum.map(transactions, &convert_amount_to_decimal/1)}
   end
 
   @doc """
@@ -36,9 +45,9 @@ defmodule HomeworkWeb.Resolvers.TransactionsResolver do
   Create a new transaction
   """
   def create_transaction(_root, args, _info) do
-    case Transactions.create_transaction(args) do
+    case Transactions.create_transaction(convert_amount_to_int(args)) do
       {:ok, transaction} ->
-        {:ok, transaction}
+        {:ok, convert_amount_to_decimal(transaction)}
 
       error ->
         {:error, "could not create transaction: #{inspect(error)}"}
@@ -51,9 +60,9 @@ defmodule HomeworkWeb.Resolvers.TransactionsResolver do
   def update_transaction(_root, %{id: id} = args, _info) do
     transaction = Transactions.get_transaction!(id)
 
-    case Transactions.update_transaction(transaction, args) do
+    case Transactions.update_transaction(transaction, convert_amount_to_int(args)) do
       {:ok, transaction} ->
-        {:ok, transaction}
+        {:ok, convert_amount_to_decimal(transaction)}
 
       error ->
         {:error, "could not update transaction: #{inspect(error)}"}
