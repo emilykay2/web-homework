@@ -23,7 +23,7 @@ defmodule Homework.CalculateAvailableCredit do
         updated_at: "some time",
         inserted_at: "some time"
       }
-      transactions = [%{amount: 200}, %{amount: 300}, %{amount: 100}]
+      transactions = [%{amount: 20000}, %{amount: 30000}, %{amount: 10000}]
 
       calculate = CompaniesResolver.calculate_available_credit(transactions)
       assert calculate.(company) == 400

@@ -12,7 +12,7 @@ defmodule Homework.CompaniesResolverTest do
 
     def generate_transaction_payload(company_id, merchant_id, user_id) do
       %{
-        amount: 100,
+        amount: 10000,
         credit: true,
         debit: true,
         description: "new transaction",

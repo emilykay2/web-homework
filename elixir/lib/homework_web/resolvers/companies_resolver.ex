@@ -5,7 +5,7 @@ defmodule HomeworkWeb.Resolvers.CompaniesResolver do
   def calculate_available_credit(transactions) do
     fn(company) ->
       total_amount_spent = Enum.reduce(transactions, 0, fn t, acc -> t.amount + acc end)
-      company.credit_line - total_amount_spent
+      company.credit_line - round(total_amount_spent / 100)
     end
   end
 
